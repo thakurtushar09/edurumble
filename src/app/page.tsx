@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white w-full relative">
       {/* Navbar */}
-      <div className="p-6 px-10 flex items-center justify-between fixed w-full top-0 z-50 bg-black bg-opacity-80 backdrop-blur-md border-b border-gray-800">
+      <div className="p-6 px-10 flex items-center justify-between fixed w-full top-0 z-50 ">
         <h1 className="text-3xl font-extrabold text-white"><span className="text-violet-500">Edu</span><span className="text-green-500">Rumble</span></h1>
         <div>
           {/* Add nav links/buttons if needed */}
