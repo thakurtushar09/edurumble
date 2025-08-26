@@ -1,83 +1,83 @@
-import Image from "next/image";
 import { Laptop, Users, BrainCircuit } from "lucide-react";
-import { CardSpotlightDemo } from "@/components/card-spotlight";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
-  const services = [
-  {
-    icon: Laptop,
-    title: "AI-Generated Quizzes",
-    description: "Teachers can instantly create smart quizzes tailored to subject, topic, and difficulty using OpenAI."
-  },
-  {
-    icon: Users,
-    title: "Compete with Friends",
-    description: "Students can join private rooms to challenge friends in real-time coding battles or quizzes."
-  },
-  {
-    icon: BrainCircuit,
-    title: "Smart Feedback & Analytics",
-    description: "AI provides instant answer explanations and personalized insights to help students improve faster."
-  }
-];
   return (
-    <div className="min-h-screen bg-black text-white w-full relative">
-      {/* Navbar */}
-      <div className="p-6 px-10 flex items-center justify-between fixed w-full top-0 z-50 ">
-        <h1 className="text-3xl font-extrabold text-white"><span className="text-violet-500">Edu</span><span className="text-green-500">Rumble</span></h1>
-        <div>
-          {/* Add nav links/buttons if needed */}
+    <div className="min-h-screen w-full bg-white">
+      <div className="relative h-screen w-full bg-[#2A1458] pl-[5%] pr-[5%] pt-[3%] overflow-hidden">
+        
+        {/* White spotlight background */}
+        <div className="absolute inset-0 flex justify-center items-center">
+          <div className="w-[90%] h-[70%] bg-[#725CAD]/20 blur-3xl rounded-full mt-20"></div>
         </div>
-      </div>
 
-      {/* Main Hero Section */}
-      <div className="flex flex-col md:flex-row items-center justify-between pt-32 px-10 gap-10">
-        {/* Left Content */}
-        <div className="max-w-xl space-y-6">
-          <h2 className="text-4xl md:text-5xl font-bold leading-tight">
-            Level Up Your <span className="text-green-500">Skill</span> with <span className="text-blue-500">AI-Powered</span> Challenges
-          </h2>
-          <p className="text-lg text-gray-300">
-            Compete in quizzes, crack coding challenges, and create private rooms to battle it out with friends. 
-            Teachers can generate smart quizzes using AI and track student progress effortlessly.
-          </p>
-          <div className="flex gap-4">
-            <button className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl font-semibold">
-              Get Started
-            </button>
-            <button className="border border-white px-6 py-3 rounded-xl hover:bg-white hover:text-black transition">
-              Learn More
-            </button>
+        {/* Navbar */}
+        <div className="relative z-10 flex items-center justify-between mx-24">
+          <div>
+            <h1 className="text-3xl text-white font-extrabold">EduRumble</h1>
+          </div>
+          <div className="flex items-center gap-7 mr-20">
+            <Link href={"/"}>
+              <h1 className="text-md font-bold text-white">How it work</h1>
+            </Link>
+            <Link href={"/"}>
+              <h1 className="text-md font-bold text-white">Prices</h1>
+            </Link>
+            <Link href={"/"}>
+              <h1 className="text-md font-bold text-white">Services</h1>
+            </Link>
+            <Link href={"/"}>
+              <h1 className="text-md font-bold text-white">About us</h1>
+            </Link>
+            <Link
+              href={"/"}
+              className="bg-white text-[#7F27FF] px-10 py-3 rounded-lg"
+            >
+              Login
+            </Link>
+            <Link
+              href={"/"}
+              className="bg-[#E4004B] text-white px-10 py-3 rounded-lg"
+            >
+              Start a new AI journey
+            </Link>
           </div>
         </div>
 
-        {/* Right Image */}
-        <div className="flex-shrink-0">
-          <Image
-            src="/hero-image.png"
-            alt="Hero Image"
-            width={500}
-            height={500}
-            className="rounded-xl shadow-lg"
-          />
-        </div>
-      </div>
+        <div className="relative z-10 mt-36 flex items-center justify-between">
+          <div className="ml-24">
+            <h1 className="text-6xl font-bold leading-tight text-white">
+              <span className="text-[#7965C1]">Challenge</span>,
+              <span className="text-[#7965C1]"> Compete</span>, and <br />
+              Conquer with <span className="text-[#7965C1]">AI-powered</span>{" "}
+              <br />
+              quizzes & coding battles.
+            </h1>
+            <h1 className="text-xl mt-3 ml-2 text-white">
+              Overwhelmed by too many resources?
+            </h1>
+            <h1 className="text-xl ml-2 text-white">
+              Let AI curate a clear{" "}
+              <span className="text-[#7965C1]">learning path for you.</span>
+            </h1>
+            <Link
+              href={"/"}
+              className="mt-10 inline-block bg-[#E4004B] text-white px-10 py-3 rounded-lg"
+            >
+              Start a new AI journey
+            </Link>
+          </div>
 
-
-      {/*card section */}
-
-      <div className="w-full max-w-7xl mx-auto bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center p-4 sm:p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-          {services.map((service, index) => (
-            <div key={index} className="flex justify-center">
-              <CardSpotlightDemo
-                icon={service.icon}
-                title={service.title}
-                description={service.description}
-                className="w-full max-w-[350px] md:max-w-none"
-              />
-            </div>
-          ))}
+          <div>
+            <Image
+              src={"/hero-gif.gif"}
+              alt="gif"
+              height={500}
+              width={500}
+              className="drop-shadow-2xl"
+            />
+          </div>
         </div>
       </div>
     </div>

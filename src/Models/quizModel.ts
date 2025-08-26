@@ -7,27 +7,17 @@ export interface Question {
 }
 
 const questionSchema: Schema = new Schema({
-  question: {
-    type: String,
-    required: true,
-  },
-  options: {
-    type: [String],
-    required: true,
-  },
-  answer: {
-    type: String,
-    required: true,
-  }
+  question: { type: String, required: true },
+  options: { type: [String], required: true },
+  answer: { type: String, required: true },
 });
 
 interface Participant {
   userId: Types.ObjectId;
   score: number;
   submittedAt: Date;
-  answers: string[]; 
+  answers: string[];
 }
-
 
 export interface Quiz extends Document {
   title: string;
@@ -40,67 +30,26 @@ export interface Quiz extends Document {
   winner?: Types.ObjectId;
 }
 
-
 const quizSchema: Schema = new Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-
-  description: {
-    type: String,
-    required: true,
-  },
-
-  questions: {
-    type: [questionSchema],
-    required: true,
-  },
-
-  createdBy: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-
-  isLive: {
-    type: Boolean,
-    default: false,
-  },
-
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  questions: { type: [questionSchema], required: true },
+  createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  createdAt: { type: Date, default: Date.now },
+  isLive: { type: Boolean, default: false },
   participants: [
     {
-      userId: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-      score: {
-        type: Number,
-        required: true,
-      },
-      submittedAt: {
-        type: Date,
-        default: Date.now,
-      },
-      answers: {
-        type: [String],
-        required: true,
-      },
-    }
+      userId: { type: Schema.Types.ObjectId, ref: "User" },
+      score: { type: Number, required: true },
+      submittedAt: { type: Date, default: Date.now },
+      answers: { type: [String], required: true },
+    },
   ],
-
-  winner: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    default: null,
-  }
+  winner: { type: Schema.Types.ObjectId, ref: "User", default: null },
 });
 
+export const QuizModel =
+  mongoose.models.Quiz || mongoose.model<Quiz>("Quiz", quizSchema);
 
-export const QuizModel = mongoose.model<Quiz>("Quiz", quizSchema);
-export const QuestionModel = mongoose.model<Question>("Question", questionSchema);
+export const QuestionModel =
+  mongoose.models.Question || mongoose.model<Question>("Question", questionSchema);
