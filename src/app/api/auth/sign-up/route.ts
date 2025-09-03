@@ -63,7 +63,7 @@ export async function POST(request: Request) {
       {
         success: true,
         message: "User registered successfully. Please verify your email.",
-        userId: newUser._id,
+        userId: newUser._id.toString(),
         token,
       },
       { status: 201 }

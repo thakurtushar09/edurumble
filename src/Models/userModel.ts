@@ -40,7 +40,6 @@ const userSchema: Schema = new Schema({
 
   verifyCode: {
     type: String,
-    required: true,
   },
 
   isVerified: {
@@ -50,7 +49,6 @@ const userSchema: Schema = new Schema({
 
   verifyCodeExpiry: {
     type: Date,
-    required: true,
   },
 });
 
