@@ -5,14 +5,11 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="min-h-screen w-full bg-white">
-      <div className="relative h-screen w-full bg-[#2A1458] pl-[5%] pr-[5%] pt-[3%] overflow-hidden">
-        
-        {/* White spotlight background */}
+      <div className="relative min-h-screen w-full bg-[#160647] pl-[5%] pr-[5%] pt-[3%] rounded-b-[150px]">
         <div className="absolute inset-0 flex justify-center items-center">
-          <div className="w-[90%] h-[70%] bg-[#725CAD]/20 blur-3xl rounded-full mt-20"></div>
+          <div className="w-[50%] h-[90%] bg-[#725CAD]/20 blur-3xl rounded-full mb-[70%]"></div>
         </div>
 
-        {/* Navbar */}
         <div className="relative z-10 flex items-center justify-between mx-24">
           <div>
             <h1 className="text-3xl text-white font-extrabold">EduRumble</h1>
@@ -31,13 +28,13 @@ export default function Home() {
               <h1 className="text-md font-bold text-white">About us</h1>
             </Link>
             <Link
-              href={"/"}
+              href={"/login"}
               className="bg-white text-[#7F27FF] px-10 py-3 rounded-lg"
             >
               Login
             </Link>
             <Link
-              href={"/"}
+              href={"/sign-up"}
               className="bg-[#E4004B] text-white px-10 py-3 rounded-lg"
             >
               Start a new AI journey
@@ -45,7 +42,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative z-10 mt-36 flex items-center justify-between">
+        <div className="relative z-10 mt-24 flex items-center justify-between">
           <div className="ml-24">
             <h1 className="text-6xl font-bold leading-tight text-white">
               <span className="text-[#7965C1]">Challenge</span>,
@@ -79,6 +76,45 @@ export default function Home() {
             />
           </div>
         </div>
+
+        <div className="w-full mt-15 mx-auto text-center relative z-10">
+          <h1 className="text-4xl text-white font-bold">
+            Struggling to stay consistent? Let AI guide you with <br /><span className="text-[#7965C1]">quizzes, roadmaps, </span>and <span className="text-[#7965C1]">live coding challenges.</span>
+          </h1>
+        </div>
+
+
+        <div className="h-[150vh] mx-12 flex">
+          <div className="flex-1  border-x-2 border-dashed border-white/10">
+            <div className="bg-red h-[30%] w-[40%] mx-auto mt-15 flex items-center flex-col">
+              <div className="h-[50%] w-[80%] rounded-full bg-[#23115D] flex items-center justify-center">
+                <Laptop className="w-1/3 h-1/3 text-white" />
+              </div>
+              <h1 className="text-md text-center mt-3">This is the sample text and more sample are there</h1>
+            </div>
+          </div>
+          <div className="flex-1 border-r-2 border-dashed border-white/10">
+            <div className="bg-red h-[30%] w-[40%] mx-auto mt-15 flex items-center flex-col">
+              <div className="h-[50%] w-[80%] rounded-full bg-[#23115D] flex items-center justify-center">
+                <Laptop className="w-1/3 h-1/3 text-white" />
+              </div>
+              <h1 className="text-md text-center mt-3">This is the sample text and more sample are there</h1>
+            </div>
+          </div>
+          <div className="flex-1 border-r-2 border-dashed border-white/10">
+            <div className="bg-red h-[30%] w-[40%] mx-auto mt-15 flex items-center flex-col">
+              <div className="h-[50%] w-[80%] rounded-full bg-[#23115D] flex items-center justify-center">
+                <Laptop className="w-1/3 h-1/3 text-white" />
+              </div>
+              <h1 className="text-md text-center mt-3">This is the sample text and more sample are there</h1>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
       </div>
     </div>
   );

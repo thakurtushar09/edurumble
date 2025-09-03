@@ -2,8 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface User extends Document {
   username: string;
   email: string;
-  firstname: string;
-  lastname: string;
+  fullname:string
   password: string;
   verifyCode: string;
   isVerified: boolean;
@@ -28,15 +27,9 @@ const userSchema: Schema = new Schema({
     ],
   },
 
-  firstname: {
+  fullname:{
     type: String,
-    required: [true, "First name is required"],
-    trim: true,
-  },
-
-  lastname: {
-    type: String,
-    required: [true, "Last name is required"],
+    required: [true, "Name is required"],
     trim: true,
   },
 

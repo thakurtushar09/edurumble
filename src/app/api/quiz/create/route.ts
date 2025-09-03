@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { topic, createdBy } = body;
+    const { topic,difficulty, createdBy } = body;
 
     if (!topic || !createdBy) {
       return NextResponse.json({ success: false, message: "Missing topic or creator ID." }, { status: 400 });
@@ -39,6 +39,7 @@ Rules:
 - Return JSON only.
 
 Topic: ${topic}
+Difficulty:${difficulty}
 `;
 
     const model = genAI.getGenerativeModel({ model: "models/gemini-1.5-pro" });
