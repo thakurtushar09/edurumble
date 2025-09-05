@@ -4,7 +4,7 @@ import { QuizModel } from "@/Models/quizModel";
 import { quizSchema } from "@/Schemas/quizSchema";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI("AIzaSyABhvvH20rftIIhQSmN8wGutGZMDLp4Myo");
+const genAI = new GoogleGenerativeAI("AIzaSyAT1hcqbnKd1MrJFCFAscHwg-Dc7_HyL4I");
 
 export async function POST(req: NextRequest) {
   await dbConnect();
