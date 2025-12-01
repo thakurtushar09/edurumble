@@ -44,30 +44,64 @@ function AuthNavbar() {
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-2"
         >
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[#E4004B] to-[#7F27FF] flex items-center justify-center">
-            <Brain size={24} className="text-white" />
-          </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-[#C4B5FD] bg-clip-text text-transparent">
-            EduRumble
-          </h1>
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[#E4004B] to-[#7F27FF] flex items-center justify-center">
+              <Brain size={24} className="text-white" />
+            </div>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-[#C4B5FD] bg-clip-text text-transparent">
+              EduRumble
+            </h1>
+          </Link>
         </motion.div>
 
         <div className="hidden lg:flex items-center gap-6">
-          {["How it works", "Pricing", "Services", "Dashboard"].map(
-            (item, index) => (
-              <motion.div
-                key={item}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Link href="/">
-                  <span className="text-sm font-medium text-white/90 hover:text-white transition-colors">
-                    {item}
-                  </span>
-                </Link>
-              </motion.div>
-            )
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <Link href="/how-it-works">
+              <span className="text-sm font-medium text-white/90 hover:text-white transition-colors">
+                How it works
+              </span>
+            </Link>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <Link href="/pricing">
+              <span className="text-sm font-medium text-white/90 hover:text-white transition-colors">
+                Pricing
+              </span>
+            </Link>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Link href="/services">
+              <span className="text-sm font-medium text-white/90 hover:text-white transition-colors">
+                Services
+              </span>
+            </Link>
+          </motion.div>
+          
+          {isAuthenticated && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <Link href="/user/dashboard">
+                <span className="text-sm font-medium text-white/90 hover:text-white transition-colors">
+                  Dashboard
+                </span>
+              </Link>
+            </motion.div>
           )}
         </div>
 
@@ -80,14 +114,14 @@ function AuthNavbar() {
               animate={{ opacity: 1, scale: 1 }}
               className="flex items-center gap-3"
             >
-              <div className="hidden md:flex items-center gap-2 bg-[#2A1458]/60 px-3 py-1.5 rounded-lg">
+              <Link href="/dashboard" className="hidden md:flex items-center gap-2 bg-[#2A1458]/60 px-3 py-1.5 rounded-lg hover:bg-[#2A1458] transition-colors">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#E4004B] to-[#7F27FF] flex items-center justify-center">
                   <User size={16} className="text-white" />
                 </div>
                 <span className="text-sm text-white">
                   Hi, {session.user?.name}
                 </span>
-              </div>
+              </Link>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -106,7 +140,7 @@ function AuthNavbar() {
                 transition={{ delay: 0.3 }}
               >
                 <Link
-                  href="/login"
+                  href="/auth/signin"
                   className="hidden md:block px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors"
                 >
                   Login
@@ -117,7 +151,7 @@ function AuthNavbar() {
                 whileTap={{ scale: 0.98 }}
               >
                 <Link
-                  href="/sign-up"
+                  href="/auth/signup"
                   className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#E4004B] to-[#7F27FF] text-white text-sm font-medium flex items-center gap-2 shadow-lg shadow-[#E4004B]/20"
                 >
                   <Zap size={16} />
@@ -143,6 +177,7 @@ export default function HomePage() {
       description:
         "Generate custom quizzes on any topic with our advanced AI. No more searching for questions - let AI do the work for you!",
       color: "from-blue-500/10 to-purple-500/10",
+      link: "/quiz/create"
     },
     {
       icon: <Sword size={24} className="text-[#7F27FF]" />,
@@ -150,6 +185,7 @@ export default function HomePage() {
       description:
         "Challenge your friends in real-time quiz battles. See who comes out on top in our competitive learning environment.",
       color: "from-purple-500/10 to-pink-500/10",
+      link: "/how-it-works#competitive"
     },
     {
       icon: <BarChart3 size={24} className="text-[#7F27FF]" />,
@@ -157,13 +193,15 @@ export default function HomePage() {
       description:
         "Get comprehensive reports on your strengths and weaknesses. Track progress and focus on areas that need improvement.",
       color: "from-pink-500/10 to-red-500/10",
+      link: "/how-it-works#analytics"
     },
     {
-      icon: <Map size={24} className="text-[#7F27FF]" />, // Changed from Roadmap to Map
+      icon: <Map size={24} className="text-[#7F27FF]" />,
       title: "Personalized Learning Roadmaps",
       description:
         "Choose any topic and let AI create a customized syllabus and learning path tailored to your goals and skill level.",
       color: "from-red-500/10 to-orange-500/10",
+      link: "/how-it-works#roadmaps"
     },
   ];
 
@@ -173,24 +211,28 @@ export default function HomePage() {
       title: "Accelerated Learning",
       description:
         "AI-powered insights help you learn faster and retain more information",
+      link: "/how-it-works#accelerated"
     },
     {
       icon: <UsersRound size={32} className="text-[#7F27FF]" />,
       title: "Social Learning",
       description:
         "Compete with friends and learn together in an engaging environment",
+      link: "/how-it-works#social"
     },
     {
       icon: <Target size={32} className="text-[#7F27FF]" />,
       title: "Focused Improvement",
       description:
         "Identify and work on your weak areas with personalized recommendations",
+      link: "/how-it-works#focused"
     },
     {
       icon: <Calendar size={32} className="text-[#7F27FF]" />,
       title: "Structured Progress",
       description:
         "Follow AI-generated roadmaps that adapt to your learning pace",
+      link: "/how-it-works#structured"
     },
   ];
 
@@ -240,23 +282,22 @@ export default function HomePage() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Link
-                      href="/quiz/create"
+                    <div
                       className="px-8 py-4 rounded-full bg-gradient-to-r from-[#E4004B] to-[#7F27FF] 
-               text-white font-medium flex items-center gap-2 shadow-lg shadow-[#E4004B]/30"
+               text-white font-medium flex items-center gap-2 shadow-lg shadow-[#E4004B]/30 cursor-pointer"
                     >
                       <Sparkles size={20} />
                       Create Your First Quiz
-                    </Link>
+                    </div>
                   </motion.div>
                 </Link>
-                <Link href="/auth/signup">
+                <Link href="/how-it-works">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="px-8 py-4 rounded-full bg-transparent border border-[#7965C1] text-white font-medium"
                   >
-                    Start Learning Free
+                    See How It Works
                   </motion.button>
                 </Link>
               </div>
@@ -310,24 +351,25 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {benefits.map((benefit, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-[#251040]/50 backdrop-blur-sm rounded-xl p-6 text-center border border-[#7965C1]/30"
-              >
-                <div className="flex justify-center mb-4">
-                  <div className="w-16 h-16 rounded-full bg-[#2A1458] flex items-center justify-center">
-                    {benefit.icon}
+              <Link href={benefit.link} key={index}>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="bg-[#251040]/50 backdrop-blur-sm rounded-xl p-6 text-center border border-[#7965C1]/30 hover:border-[#7965C1]/60 hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+                >
+                  <div className="flex justify-center mb-4">
+                    <div className="w-16 h-16 rounded-full bg-[#2A1458] flex items-center justify-center">
+                      {benefit.icon}
+                    </div>
                   </div>
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  {benefit.title}
-                </h3>
-                <p className="text-sm text-[#C4B5FD]">{benefit.description}</p>
-              </motion.div>
+                  <h3 className="text-lg font-semibold text-white mb-2">
+                    {benefit.title}
+                  </h3>
+                  <p className="text-sm text-[#C4B5FD]">{benefit.description}</p>
+                </motion.div>
+              </Link>
             ))}
           </div>
         </div>
@@ -358,33 +400,34 @@ export default function HomePage() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-6">
               {features.map((feature, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`p-6 rounded-xl bg-gradient-to-br ${feature.color} border border-[#7965C1]/30 cursor-pointer transition-all ${
-                    activeFeature === index
-                      ? "ring-2 ring-[#7F27FF]"
-                      : "hover:border-[#C4B5FD]/50"
-                  }`}
-                  onClick={() => setActiveFeature(index)}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center">
-                      {feature.icon}
+                <Link href={feature.link} key={index}>
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className={`p-6 rounded-xl bg-gradient-to-br ${feature.color} border border-[#7965C1]/30 cursor-pointer transition-all hover:scale-[1.02] ${
+                      activeFeature === index
+                        ? "ring-2 ring-[#7F27FF]"
+                        : "hover:border-[#C4B5FD]/50"
+                    }`}
+                    onClick={() => setActiveFeature(index)}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center">
+                        {feature.icon}
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-white mb-1">
+                          {feature.title}
+                        </h3>
+                        <p className="text-white/70 text-sm">
+                          {feature.description}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-white mb-1">
-                        {feature.title}
-                      </h3>
-                      <p className="text-white/70 text-sm">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                </Link>
               ))}
             </div>
 
@@ -406,9 +449,7 @@ export default function HomePage() {
                   <p className="text-white/70 mb-6">
                     {features[activeFeature].description}
                   </p>
-                  <Link
-                    href={activeFeature === 0 ? "/quiz/create" : "/auth/signup"}
-                  >
+                  <Link href={features[activeFeature].link}>
                     <div className="flex items-center text-[#7F27FF] cursor-pointer hover:underline">
                       <span className="text-sm font-medium">Try it now</span>
                       <ChevronRight size={16} />
@@ -448,13 +489,13 @@ export default function HomePage() {
                   Get Started Free
                 </motion.button>
               </Link>
-              <Link href="/quiz/create">
+              <Link href="/how-it-works">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-3.5 bg-transparent border border-white text-white font-medium rounded-full"
                 >
-                  Create a Quiz
+                  See How It Works
                 </motion.button>
               </Link>
             </div>
@@ -467,34 +508,84 @@ export default function HomePage() {
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
+              <Link href="/" className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-[#E4004B] to-[#7F27FF] flex items-center justify-center">
                   <Brain size={18} className="text-white" />
                 </div>
                 <h3 className="text-xl font-bold">EduRumble</h3>
-              </div>
+              </Link>
               <p className="text-gray-400 text-sm">
                 AI-powered quiz generation and personalized learning roadmaps.
               </p>
             </div>
 
-            {["Product", "Company", "Support", "Legal"].map((category) => (
-              <div key={category}>
-                <h4 className="font-semibold mb-4">{category}</h4>
-                <ul className="space-y-2 text-sm text-gray-400">
-                  {["Features", "Pricing", "Case Studies", "API"]
-                    .slice(0, 3)
-                    .map((item) => (
-                      <li
-                        key={item}
-                        className="hover:text-white transition-colors cursor-pointer"
-                      >
-                        {item}
-                      </li>
-                    ))}
-                </ul>
-              </div>
-            ))}
+            <div>
+              <h4 className="font-semibold mb-4">Quick Links</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>
+                  <Link href="/how-it-works" className="hover:text-white transition-colors">
+                    How It Works
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/quiz/create" className="hover:text-white transition-colors">
+                    Create Quiz
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/dashboard" className="hover:text-white transition-colors">
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/auth/signin" className="hover:text-white transition-colors">
+                    Login
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4">Company</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>
+                  <Link href="/about" className="hover:text-white transition-colors">
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/services" className="hover:text-white transition-colors">
+                    Services
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/pricing" className="hover:text-white transition-colors">
+                    Pricing
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4">Legal</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>
+                  <Link href="/privacy" className="hover:text-white transition-colors">
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/terms" className="hover:text-white transition-colors">
+                    Terms of Service
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className="hover:text-white transition-colors">
+                    Contact Us
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
 
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400 text-sm">
