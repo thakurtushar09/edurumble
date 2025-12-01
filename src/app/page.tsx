@@ -1,12 +1,31 @@
-'use client';
+"use client";
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Sparkles, Brain, Trophy, Users, Zap, ChevronRight, ArrowRight, BookOpen, User, LogOut, Target, Clock, BarChart3, Map, Sword, UsersRound, Calendar, TrendingUp } from "lucide-react";
+import {
+  Sparkles,
+  Brain,
+  Trophy,
+  Users,
+  Zap,
+  ChevronRight,
+  ArrowRight,
+  BookOpen,
+  User,
+  LogOut,
+  Target,
+  Clock,
+  BarChart3,
+  Map,
+  Sword,
+  UsersRound,
+  Calendar,
+  TrendingUp,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
-import { io } from "socket.io-client"
+import { io } from "socket.io-client";
 
 function AuthNavbar() {
   const { data: session, status } = useSession();
@@ -14,15 +33,13 @@ function AuthNavbar() {
   const isAuthenticated = status === "authenticated";
 
   const handleLogout = () => {
-    signOut({ callbackUrl: '/' });
+    signOut({ callbackUrl: "/" });
   };
-
-  
 
   return (
     <nav className="sticky top-0 z-50 backdrop-blur-md bg-[#251040]/70 border-b border-[#7965C1]/20">
       <div className="container mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-2"
@@ -34,29 +51,31 @@ function AuthNavbar() {
             EduRumble
           </h1>
         </motion.div>
-        
+
         <div className="hidden lg:flex items-center gap-6">
-          {["How it works", "Pricing", "Services", "About"].map((item, index) => (
-            <motion.div
-              key={item}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Link href="/">
-                <span className="text-sm font-medium text-white/90 hover:text-white transition-colors">
-                  {item}
-                </span>
-              </Link>
-            </motion.div>
-          ))}
+          {["How it works", "Pricing", "Services", "Dashboard"].map(
+            (item, index) => (
+              <motion.div
+                key={item}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Link href="/">
+                  <span className="text-sm font-medium text-white/90 hover:text-white transition-colors">
+                    {item}
+                  </span>
+                </Link>
+              </motion.div>
+            )
+          )}
         </div>
-        
+
         <div className="flex items-center gap-4">
           {isLoading ? (
             <div className="h-8 w-8 rounded-full bg-gray-700 animate-pulse"></div>
           ) : isAuthenticated ? (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               className="flex items-center gap-3"
@@ -65,7 +84,9 @@ function AuthNavbar() {
                 <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#E4004B] to-[#7F27FF] flex items-center justify-center">
                   <User size={16} className="text-white" />
                 </div>
-                <span className="text-sm text-white">Hi, {session.user?.name}</span>
+                <span className="text-sm text-white">
+                  Hi, {session.user?.name}
+                </span>
               </div>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -85,7 +106,7 @@ function AuthNavbar() {
                 transition={{ delay: 0.3 }}
               >
                 <Link
-                  href="/auth/signin"
+                  href="/login"
                   className="hidden md:block px-4 py-2 text-sm font-medium text-white/90 hover:text-white transition-colors"
                 >
                   Login
@@ -96,7 +117,7 @@ function AuthNavbar() {
                 whileTap={{ scale: 0.98 }}
               >
                 <Link
-                  href="/auth/signup"
+                  href="/sign-up"
                   className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#E4004B] to-[#7F27FF] text-white text-sm font-medium flex items-center gap-2 shadow-lg shadow-[#E4004B]/20"
                 >
                   <Zap size={16} />
@@ -114,55 +135,63 @@ function AuthNavbar() {
 // Main page component
 export default function HomePage() {
   const [activeFeature, setActiveFeature] = useState(0);
-  
+
   const features = [
     {
       icon: <Sparkles size={24} className="text-[#7F27FF]" />,
       title: "AI-Powered Quiz Creation",
-      description: "Generate custom quizzes on any topic with our advanced AI. No more searching for questions - let AI do the work for you!",
-      color: "from-blue-500/10 to-purple-500/10"
+      description:
+        "Generate custom quizzes on any topic with our advanced AI. No more searching for questions - let AI do the work for you!",
+      color: "from-blue-500/10 to-purple-500/10",
     },
     {
       icon: <Sword size={24} className="text-[#7F27FF]" />,
       title: "Compete with Friends",
-      description: "Challenge your friends in real-time quiz battles. See who comes out on top in our competitive learning environment.",
-      color: "from-purple-500/10 to-pink-500/10"
+      description:
+        "Challenge your friends in real-time quiz battles. See who comes out on top in our competitive learning environment.",
+      color: "from-purple-500/10 to-pink-500/10",
     },
     {
       icon: <BarChart3 size={24} className="text-[#7F27FF]" />,
       title: "Detailed Performance Analytics",
-      description: "Get comprehensive reports on your strengths and weaknesses. Track progress and focus on areas that need improvement.",
-      color: "from-pink-500/10 to-red-500/10"
+      description:
+        "Get comprehensive reports on your strengths and weaknesses. Track progress and focus on areas that need improvement.",
+      color: "from-pink-500/10 to-red-500/10",
     },
     {
       icon: <Map size={24} className="text-[#7F27FF]" />, // Changed from Roadmap to Map
       title: "Personalized Learning Roadmaps",
-      description: "Choose any topic and let AI create a customized syllabus and learning path tailored to your goals and skill level.",
-      color: "from-red-500/10 to-orange-500/10"
-    }
+      description:
+        "Choose any topic and let AI create a customized syllabus and learning path tailored to your goals and skill level.",
+      color: "from-red-500/10 to-orange-500/10",
+    },
   ];
 
   const benefits = [
     {
       icon: <TrendingUp size={32} className="text-[#7F27FF]" />,
       title: "Accelerated Learning",
-      description: "AI-powered insights help you learn faster and retain more information"
+      description:
+        "AI-powered insights help you learn faster and retain more information",
     },
     {
       icon: <UsersRound size={32} className="text-[#7F27FF]" />,
       title: "Social Learning",
-      description: "Compete with friends and learn together in an engaging environment"
+      description:
+        "Compete with friends and learn together in an engaging environment",
     },
     {
       icon: <Target size={32} className="text-[#7F27FF]" />,
       title: "Focused Improvement",
-      description: "Identify and work on your weak areas with personalized recommendations"
+      description:
+        "Identify and work on your weak areas with personalized recommendations",
     },
     {
       icon: <Calendar size={32} className="text-[#7F27FF]" />,
       title: "Structured Progress",
-      description: "Follow AI-generated roadmaps that adapt to your learning pace"
-    }
+      description:
+        "Follow AI-generated roadmaps that adapt to your learning pace",
+    },
   ];
 
   return (
@@ -176,7 +205,7 @@ export default function HomePage() {
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-[#7F27FF]/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#E4004B]/10 rounded-full blur-3xl"></div>
         </div>
-        
+
         <div className="container mx-auto max-w-6xl">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -186,24 +215,40 @@ export default function HomePage() {
               className="text-center lg:text-left"
             >
               <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7965C1] to-[#C4B5FD]">Learn</span>,
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7965C1] to-[#C4B5FD]"> Compete</span>, and <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7965C1] to-[#C4B5FD]">Master</span> with AI
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7965C1] to-[#C4B5FD]">
+                  Learn
+                </span>
+                ,
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7965C1] to-[#C4B5FD]">
+                  {" "}
+                  Compete
+                </span>
+                , and <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7965C1] to-[#C4B5FD]">
+                  Master
+                </span>{" "}
+                with AI
               </h1>
               <p className="text-lg text-white/80 mb-8 max-w-2xl">
-                Create AI-powered quizzes, compete with friends, and follow personalized learning roadmaps. 
-                Transform how you learn with intelligent analytics and tailored educational experiences.
+                Create AI-powered quizzes, compete with friends, and follow
+                personalized learning roadmaps. Transform how you learn with
+                intelligent analytics and tailored educational experiences.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link href="/quiz/create">
-                  <motion.button
+                  <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-8 py-4 rounded-full bg-gradient-to-r from-[#E4004B] to-[#7F27FF] text-white font-medium flex items-center gap-2 shadow-lg shadow-[#E4004B]/30"
                   >
-                    <Sparkles size={20} />
-                    Create Your First Quiz
-                  </motion.button>
+                    <Link
+                      href="/quiz/create"
+                      className="px-8 py-4 rounded-full bg-gradient-to-r from-[#E4004B] to-[#7F27FF] 
+               text-white font-medium flex items-center gap-2 shadow-lg shadow-[#E4004B]/30"
+                    >
+                      <Sparkles size={20} />
+                      Create Your First Quiz
+                    </Link>
+                  </motion.div>
                 </Link>
                 <Link href="/auth/signup">
                   <motion.button
@@ -251,10 +296,15 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Why <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7965C1] to-[#7F27FF]">EduRumble</span>?
+              Why{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7965C1] to-[#7F27FF]">
+                EduRumble
+              </span>
+              ?
             </h2>
             <p className="text-white/80 max-w-2xl mx-auto">
-              Our AI-powered platform offers a unique approach to learning that combines competition, personalization, and intelligent analytics
+              Our AI-powered platform offers a unique approach to learning that
+              combines competition, personalization, and intelligent analytics
             </p>
           </motion.div>
 
@@ -273,7 +323,9 @@ export default function HomePage() {
                     {benefit.icon}
                   </div>
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">{benefit.title}</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  {benefit.title}
+                </h3>
                 <p className="text-sm text-[#C4B5FD]">{benefit.description}</p>
               </motion.div>
             ))}
@@ -291,10 +343,15 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              How <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7965C1] to-[#7F27FF]">EduRumble</span> Works
+              How{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7965C1] to-[#7F27FF]">
+                EduRumble
+              </span>{" "}
+              Works
             </h2>
             <p className="text-white/80 max-w-2xl mx-auto">
-              Discover our powerful features designed to transform your learning experience
+              Discover our powerful features designed to transform your learning
+              experience
             </p>
           </motion.div>
 
@@ -308,7 +365,9 @@ export default function HomePage() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   className={`p-6 rounded-xl bg-gradient-to-br ${feature.color} border border-[#7965C1]/30 cursor-pointer transition-all ${
-                    activeFeature === index ? 'ring-2 ring-[#7F27FF]' : 'hover:border-[#C4B5FD]/50'
+                    activeFeature === index
+                      ? "ring-2 ring-[#7F27FF]"
+                      : "hover:border-[#C4B5FD]/50"
                   }`}
                   onClick={() => setActiveFeature(index)}
                 >
@@ -317,8 +376,12 @@ export default function HomePage() {
                       {feature.icon}
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold text-white mb-1">{feature.title}</h3>
-                      <p className="text-white/70 text-sm">{feature.description}</p>
+                      <h3 className="text-xl font-semibold text-white mb-1">
+                        {feature.title}
+                      </h3>
+                      <p className="text-white/70 text-sm">
+                        {feature.description}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
@@ -334,10 +397,18 @@ export default function HomePage() {
               <div className="relative w-full max-w-md">
                 <div className="absolute -inset-4 bg-gradient-to-r from-[#E4004B] to-[#7F27FF] rounded-3xl opacity-20 blur-xl"></div>
                 <div className="relative bg-[#251040]/90 backdrop-blur-xl rounded-2xl border border-[#7965C1]/30 p-8 shadow-2xl">
-                  <div className="text-4xl font-black text-gray-200/70 mb-4">0{activeFeature + 1}</div>
-                  <h3 className="text-2xl font-bold text-white mb-4">{features[activeFeature].title}</h3>
-                  <p className="text-white/70 mb-6">{features[activeFeature].description}</p>
-                  <Link href={activeFeature === 0 ? "/quiz/create" : "/auth/signup"}>
+                  <div className="text-4xl font-black text-gray-200/70 mb-4">
+                    0{activeFeature + 1}
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-4">
+                    {features[activeFeature].title}
+                  </h3>
+                  <p className="text-white/70 mb-6">
+                    {features[activeFeature].description}
+                  </p>
+                  <Link
+                    href={activeFeature === 0 ? "/quiz/create" : "/auth/signup"}
+                  >
                     <div className="flex items-center text-[#7F27FF] cursor-pointer hover:underline">
                       <span className="text-sm font-medium">Try it now</span>
                       <ChevronRight size={16} />
@@ -360,9 +431,12 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="bg-gradient-to-r from-[#E4004B] to-[#7F27FF] rounded-2xl p-10 md:p-12 text-center text-white shadow-xl"
           >
-            <h3 className="text-2xl md:text-3xl font-bold mb-4">Ready to revolutionize your learning?</h3>
+            <h3 className="text-2xl md:text-3xl font-bold mb-4">
+              Ready to revolutionize your learning?
+            </h3>
             <p className="text-white/90 mb-8 max-w-2xl mx-auto">
-              Join the community of learners who are already mastering new skills with AI-powered education.
+              Join the community of learners who are already mastering new
+              skills with AI-powered education.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/auth/signup">
@@ -403,21 +477,26 @@ export default function HomePage() {
                 AI-powered quiz generation and personalized learning roadmaps.
               </p>
             </div>
-            
-            {['Product', 'Company', 'Support', 'Legal'].map((category) => (
+
+            {["Product", "Company", "Support", "Legal"].map((category) => (
               <div key={category}>
                 <h4 className="font-semibold mb-4">{category}</h4>
                 <ul className="space-y-2 text-sm text-gray-400">
-                  {['Features', 'Pricing', 'Case Studies', 'API'].slice(0, 3).map((item) => (
-                    <li key={item} className="hover:text-white transition-colors cursor-pointer">
-                      {item}
-                    </li>
-                  ))}
+                  {["Features", "Pricing", "Case Studies", "API"]
+                    .slice(0, 3)
+                    .map((item) => (
+                      <li
+                        key={item}
+                        className="hover:text-white transition-colors cursor-pointer"
+                      >
+                        {item}
+                      </li>
+                    ))}
                 </ul>
               </div>
             ))}
           </div>
-          
+
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400 text-sm">
             <p>© {new Date().getFullYear()} EduRumble. All rights reserved.</p>
           </div>

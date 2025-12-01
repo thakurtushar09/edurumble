@@ -31,7 +31,7 @@ function AuthNavbar() {
         </motion.div>
 
         <div className="hidden lg:flex items-center gap-6">
-          {["How it works", "Pricing", "Services", "About"].map((item, index) => (
+          {["How it works", "Pricing", "Services", "Dashboard"].map((item, index) => (
             <motion.div
               key={item}
               initial={{ opacity: 0, y: -10 }}

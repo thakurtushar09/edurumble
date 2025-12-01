@@ -3,6 +3,7 @@ import { UserModel } from "@/Models/userModel";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { JWTPayload, SignJWT } from "jose";
+import VerificationEmail from "../../../../../emails/verificationEmail";
 
 const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET || "myjwtsecret");
 
