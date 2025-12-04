@@ -1,7 +1,9 @@
+import dbConnect from "@/lib/dbConnect";
 import { QuizModel } from "@/Models/quizModel";
 import { UserModel } from "@/Models/userModel";
 
 export async function POST(req: Request) {
+    await dbConnect()
     const { userId, quizId } = await req.json();
 
     const userExist = await UserModel.findById(userId);
