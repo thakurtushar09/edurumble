@@ -1,9 +1,11 @@
-'use client'
+'use client';
+
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, Play, Users, Clock, BarChart3 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 interface Question {
     question: string;
@@ -32,41 +34,89 @@ interface ApiResponse {
 }
 
 const QuizPreviewPage = () => {
-    const params = useParams();
+    const params = useParams() as { id: string };
     const router = useRouter();
     const { id } = params;
+
+    const { data: session, status } = useSession();
+
     const [quiz, setQuiz] = useState<Quiz | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-
     const handleMakeLive = () => {
-
         router.push(`/quiz/${id}`);
     };
 
     useEffect(() => {
-        const fetchQuiz = async () => {
+        if (!id) return;
+
+        // Wait until session is resolved
+        if (status === 'loading') return;
+
+        const fetchQuizWithAuth = async () => {
             try {
                 setLoading(true);
-                const res = await axios.post(`/api/quiz/get`, { id });
+                setError('');
+
+                // Get userId from session
+                const userAny = session?.user as any;
+                const userId = userAny?._id || userAny?.id;
+
+                if (!userId) {
+                    setError('User not logged in');
+                    return;
+                }
+
+                // 1) Check ownership / authorization
+                const checkRes = await axios.post('/api/quiz/checkowner', {
+                    quizId: id,
+                    userId,
+                });
+
+                if (!checkRes.data?.success) {
+                    setError(checkRes.data?.message || 'You are not authorized to view this quiz.');
+                    return;
+                }
+
+                // 2) If authorized, fetch quiz data
+                const res = await axios.post<ApiResponse>('/api/quiz/get', { id });
+
+                if (!res.data.success || !res.data.quiz) {
+                    setError(res.data.message || 'Failed to load quiz.');
+                    return;
+                }
+
                 setQuiz(res.data.quiz);
-                console.log(res);
-                
+            } catch (err: any) {
+                if (axios.isAxiosError(err) && err.response) {
+                    const msg = (err.response.data as any)?.message;
+                    const statusCode = err.response.status;
+
+                    if (statusCode === 401) {
+                        setError(msg || 'You are not authorized to view this quiz.');
+                    } else if (statusCode === 404) {
+                        setError(msg || 'Quiz not found.');
+                    } else {
+                        setError(msg || 'Something went wrong while loading the quiz.');
+                    }
+                } else {
+                    setError('Something went wrong while loading the quiz.');
+                }
+            } finally {
                 setLoading(false);
-            } catch (error) {
-                setError("Failed to load quiz");
-                setLoading(false);
-                console.error(error);
             }
         };
-        
 
-        if (id) fetchQuiz();
+        // If unauthenticated, show error
+        if (status === 'unauthenticated') {
+            setError('Please log in to view this quiz.');
+            setLoading(false);
+            return;
+        }
 
-    }, [id]);
-
-    
+        fetchQuizWithAuth();
+    }, [id, session, status]);
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -76,18 +126,29 @@ const QuizPreviewPage = () => {
         });
     };
 
-    if (loading) {
+    if (status === 'loading' || loading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-[#0F0628] via-[#2A1458] to-[#1E0B43] flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7F27FF]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7F27FF]" />
             </div>
         );
     }
 
     if (error || !quiz) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-[#0F0628] via-[#2A1458] to-[#1E0B43] flex items-center justify-center">
-                <div className="text-white text-xl">{error || 'Quiz not found'}</div>
+            <div className="min-h-screen bg-gradient-to-br from-[#0F0628] via-[#2A1458] to-[#1E0B43] flex items-center justify-center px-4">
+                <div className="max-w-md text-center">
+                    <h2 className="text-2xl font-bold text-white mb-2">Access Issue</h2>
+                    <p className="text-[#C4B5FD] mb-4">
+                        {error || 'Quiz not found'}
+                    </p>
+                    <button
+                        onClick={() => router.push('/')}
+                        className="mt-2 px-4 py-2 rounded-lg bg-[#7F27FF] text-white font-medium"
+                    >
+                        Go back home
+                    </button>
+                </div>
             </div>
         );
     }
@@ -119,7 +180,9 @@ const QuizPreviewPage = () => {
                             <BarChart3 size={20} />
                             <span className="text-sm">Questions</span>
                         </div>
-                        <div className="text-2xl font-bold text-white mt-2">{quiz.questions.length}</div>
+                        <div className="text-2xl font-bold text-white mt-2">
+                            {quiz.questions.length}
+                        </div>
                     </div>
 
                     <div className="bg-[#251040]/50 backdrop-blur-md rounded-xl p-4 border border-[#7965C1]/30">
@@ -127,7 +190,9 @@ const QuizPreviewPage = () => {
                             <Users size={20} />
                             <span className="text-sm">Participants</span>
                         </div>
-                        <div className="text-2xl font-bold text-white mt-2">{quiz.participants.length}</div>
+                        <div className="text-2xl font-bold text-white mt-2">
+                            {quiz.participants.length}
+                        </div>
                     </div>
 
                     <div className="bg-[#251040]/50 backdrop-blur-md rounded-xl p-4 border border-[#7965C1]/30">
@@ -135,7 +200,9 @@ const QuizPreviewPage = () => {
                             <Clock size={20} />
                             <span className="text-sm">Created</span>
                         </div>
-                        <div className="text-sm text-white mt-2">{formatDate(quiz.createdAt)}</div>
+                        <div className="text-sm text-white mt-2">
+                            {formatDate(quiz.createdAt)}
+                        </div>
                     </div>
 
                     <div className="bg-[#251040]/50 backdrop-blur-md rounded-xl p-4 border border-[#7965C1]/30">
@@ -144,8 +211,9 @@ const QuizPreviewPage = () => {
                             <span className="text-sm">Status</span>
                         </div>
                         <div
-                            className={`text-sm font-medium mt-2 ${quiz.isLive ? 'text-green-400' : 'text-amber-400'
-                                }`}
+                            className={`text-sm font-medium mt-2 ${
+                                quiz.isLive ? 'text-green-400' : 'text-amber-400'
+                            }`}
                         >
                             {quiz.isLive ? 'Live' : 'Draft'}
                         </div>
@@ -197,32 +265,37 @@ const QuizPreviewPage = () => {
                             </div>
 
                             <div className="grid gap-3">
-                                {question.options.map((option, optIndex) => (
-                                    <div
-                                        key={optIndex}
-                                        className={`p-3 rounded-lg border ${option === question.answer
-                                                ? 'bg-green-500/10 border-green-500/30 text-green-200'
-                                                : 'bg-[#2A1458]/60 border-[#7965C1]/30 text-white'
+                                {question.options.map((option, optIndex) => {
+                                    const isCorrect = option === question.answer;
+                                    return (
+                                        <div
+                                            key={optIndex}
+                                            className={`p-3 rounded-lg border ${
+                                                isCorrect
+                                                    ? 'bg-green-500/10 border-green-500/30 text-green-200'
+                                                    : 'bg-[#2A1458]/60 border-[#7965C1]/30 text-white'
                                             }`}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <div
-                                                className={`w-6 h-6 rounded-full flex items-center justify-center ${option === question.answer
-                                                        ? 'bg-green-500 text-white'
-                                                        : 'bg-[#7965C1]/30 text-[#C4B5FD]'
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div
+                                                    className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                                                        isCorrect
+                                                            ? 'bg-green-500 text-white'
+                                                            : 'bg-[#7965C1]/30 text-[#C4B5FD]'
                                                     }`}
-                                            >
-                                                {String.fromCharCode(65 + optIndex)}
+                                                >
+                                                    {String.fromCharCode(65 + optIndex)}
+                                                </div>
+                                                <span>{option}</span>
+                                                {isCorrect && (
+                                                    <span className="ml-auto text-green-400 text-sm">
+                                                        Correct answer
+                                                    </span>
+                                                )}
                                             </div>
-                                            <span>{option}</span>
-                                            {option === question.answer && (
-                                                <span className="ml-auto text-green-400 text-sm">
-                                                    Correct answer
-                                                </span>
-                                            )}
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </motion.div>
                     ))}

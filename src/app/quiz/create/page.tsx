@@ -32,10 +32,16 @@ function AuthNavbar() {
   const { data: session, status } = useSession();
   const isLoading = status === "loading";
   const isAuthenticated = status === "authenticated";
+  const router = useRouter()
 
   const handleLogout = () => {
     signOut({ callbackUrl: '/' });
   };
+
+  if(status=='unauthenticated'){
+    router.push('/sign-up');
+    return;
+  }
 
   return (
     <nav className="sticky top-0 z-50 backdrop-blur-md bg-[#251040]/70 border-b border-[#7965C1]/20">
